@@ -1,6 +1,6 @@
 // variables
 const formulario = document.querySelector('#formulario');
-const listatTweet = document.querySelector('#lista-tweets');
+const listaTweet = document.querySelector('#lista-tweets');
 let tweets = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,7 +18,21 @@ function agregarTweet(evento) {
     mostrarError('Un mensaje no puede ir vacio');
     return; //previene ejecución de más lineas de código
   }
-  console.log('Agregando tweet');
+
+  // crear objeto con identificado unico
+  const tweetObj = {
+    id: Date.now(), //muestra fecha unica
+    tweet,
+  };
+
+  // añadir al arreglo de tweets
+  tweets = [...tweets, tweetObj];
+
+  // Una vez agregado vamos a crear el HTML
+  crearHTML();
+
+  // Reiniciar el formulario
+  formulario.reset();
 }
 
 // Mostrar un mensaje de error
@@ -35,4 +49,29 @@ function mostrarError(mensaje) {
   setTimeout(() => {
     mensajeError.remove();
   }, 3000);
+}
+
+// Muestra un listado de los tweets
+function crearHTML() {
+  // limpia
+  limpiarHTML();
+  if (tweets.length > 0) {
+    tweets.forEach((elemento) => {
+      // Crear HTML
+      const li = document.createElement('LI');
+
+      // Añadir el texto
+      li.innerText = elemento.tweet;
+
+      // Insertarlo en el html
+      listaTweet.appendChild(li);
+    });
+  }
+}
+
+function limpiarHTML() {
+  // Remover el primer hijo encontrado
+  while (listaTweet.firstChild) {
+    listaTweet.removeChild(listaTweet.firstChild);
+  }
 }
