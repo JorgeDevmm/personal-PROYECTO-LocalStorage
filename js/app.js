@@ -3,9 +3,22 @@ const formulario = document.querySelector('#formulario');
 const listaTweet = document.querySelector('#lista-tweets');
 let tweets = [];
 
-document.addEventListener('DOMContentLoaded', () => {
+// EventListeners
+eventListener();
+
+function eventListener() {
+  // Cuando usuario agrega un nuevo tweet
   formulario.addEventListener('submit', agregarTweet);
-});
+
+  // Cuando el documento esta listo
+  document.addEventListener('DOMContentLoaded', () => {
+    // intenta obtener contenido en localstorage o devuelve un array []
+    tweets = JSON.parse(localStorage.getItem('twees')) || [];
+
+    // Creo el html si existe algo en localstorage
+    crearHTML();
+  });
+}
 
 // funciones
 function agregarTweet(evento) {
@@ -57,7 +70,7 @@ function crearHTML() {
   limpiarHTML();
   if (tweets.length > 0) {
     tweets.forEach((elemento) => {
-      // Crear HTML
+      // Crear HTML|
       const li = document.createElement('LI');
 
       // Añadir el texto
@@ -67,8 +80,15 @@ function crearHTML() {
       listaTweet.appendChild(li);
     });
   }
+
+  sincronizarStorage();
+}
+// Agrega los tweets actuales
+function sincronizarStorage() {
+  localStorage.setItem('twees', JSON.stringify(tweets));
 }
 
+// Limpar el HTML
 function limpiarHTML() {
   // Remover el primer hijo encontrado
   while (listaTweet.firstChild) {
